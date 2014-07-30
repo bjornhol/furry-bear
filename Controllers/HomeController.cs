@@ -11,13 +11,18 @@ namespace FurryBear.Controllers
 {
     public class HomeController : Controller
     {
+        public HomeController(IDocumentStore documentStore)
+        {
+            _documentStore = documentStore;
+        }
+
+        private IDocumentStore _documentStore;
+
         public ActionResult Index()
         {
             ViewBag.Message = "";
 
-            var store = Store.Init();
-
-            ViewBag.Online = store.IsServerOnline() ? "Yes" : "No...";
+            ViewBag.Online = _documentStore.IsServerOnline() ? "Yes" : "No...";
 
             return View();
         }
