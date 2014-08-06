@@ -23,11 +23,23 @@ namespace FurryBear.Installers
 
         static IDocumentStore CreateDocumentStore()
         {
-            var store = new DocumentStore
+            string connectionStringName = "FurryBearDb";
+
+            string connectionString = Environment.GetEnvironmentVariable(connectionStringName);
+            
+            DocumentStore store;
+            if (!string.IsNullOrEmpty(connectionString))
             {
-                ConnectionStringName = "FurryBearDb"
-            };
+                store = new DocumentStore();
+                store.ParseConnectionString(connectionString);
+            }
+            else
+            {
+                store = new DocumentStore { ConnectionStringName = connectionStringName };
+            }
+
             store.Initialize();
+
             return store;
         }
 

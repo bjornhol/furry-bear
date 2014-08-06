@@ -207,6 +207,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Properties\PublishProfiles\furry-bear - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\furry-bear - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\ironfoundry.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Images\bear_cub_116312.jpg" />
     <Content Include="Scripts\bootstrap.js" />
