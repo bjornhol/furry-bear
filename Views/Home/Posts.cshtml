@@ -1,0 +1,32 @@
+﻿@model IEnumerable<FurryBear.Models.Post>
+
+<div class="text-center">
+    <h4>All posts</h4>
+</div>
+<div class="text-center">
+    @foreach (var post in Model)
+    {
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <span class="pull-left">
+                    <a href="@Url.Action("Post")?id=@post.Id">@post.Title</a>
+                </span>
+                <span class="pull-right">@post.Date</span>
+                &nbsp;
+            </div>
+            <div class="panel-body">
+                <p class="text-left">
+                    @post.Message
+                </p>
+            </div>
+            <div class="panel-footer">
+                <span>Cached at</span> <span>@post.CachedAt</span>
+            </div>
+        </div>
+    }
+</div>
+<div class="text-center">
+    <p>@Html.ActionLink("Add post", "AddPost", null, new {@class="btn btn-success"})</p>
+    <p>@Html.ActionLink("Flush posts", "FlushPosts", null, new {@class="btn btn-danger"})</p>
+</div>
+

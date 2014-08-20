@@ -1,0 +1,16 @@
+﻿@model FurryBear.Models.Post
+
+<div class="text-center">
+    @using (Html.BeginForm())
+    {
+        <div class="form-group">
+            @Html.LabelFor(p => p.Title)
+            @Html.TextBoxFor(p => p.Title, new { @class="form-control", @placeholder="Title" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(p => p.Message)
+            @Html.TextAreaFor(p => p.Message, new { @class="form-control", @placeholder="Message" })
+        </div>
+        <input type="submit" value="Add" class="btn btn-default" />
+    }
+</div>

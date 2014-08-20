@@ -1,0 +1,17 @@
+﻿@model FurryBear.Models.Post
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <span class="pull-left">@Model.Title</span>
+        <span class="pull-right">@Model.Date</span>
+        &nbsp;
+    </div>
+    <div class="panel-body">
+        <p class="text-left">
+            @Model.Message
+        </p>
+    </div>
+    <div class="panel-footer">
+        <span>Cached at</span> <span>@Model.CachedAt</span>
+    </div>
+</div>
