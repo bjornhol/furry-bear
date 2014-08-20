@@ -175,3 +175,4 @@ UpgradeLog*.htm
 FakesAssemblies/
 
 Web.Debug.config
+Web.Release.config
