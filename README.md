@@ -1,4 +1,4 @@
-furry-bear
+[furry-bear](http://furry-bear.azurewebsites.net/)
 ==========
 
 This is where I try out stuff. I hope it will end up in a tool for publishing messages internally in a company. Something that can replace mass email.
