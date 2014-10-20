@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Web;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+using Polly;
+using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Document;
 
@@ -13,6 +17,8 @@ namespace FurryBear.Installers
 {
     public class RavenInstaller : IWindsorInstaller
     {
+        const string CONNECTION_STRING_NAME = "RavenHQ";
+
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
@@ -23,30 +29,26 @@ namespace FurryBear.Installers
 
         static IDocumentStore CreateDocumentStore()
         {
-            string connectionStringName = "FurryBearDb";
+            DocumentStore store = new DocumentStore { ConnectionStringName = CONNECTION_STRING_NAME };
 
-            string connectionString = Environment.GetEnvironmentVariable(connectionStringName);
-            
-            DocumentStore store;
-            if (!string.IsNullOrEmpty(connectionString))
+            return Policy
+                .Handle<WebException>()
+                .Retry(1, (exception, i, arg3) =>
             {
-                store = new DocumentStore();
-                store.ParseConnectionString(connectionString);
-            }
-            else
+                Trace.WriteLine(string.Format("Failed to get database service. This was retry {0}. Exception catched: {1}", i, exception.Message));
+            }).Execute(() =>
             {
-                store = new DocumentStore { ConnectionStringName = connectionStringName };
-            }
+                store.Initialize();
 
-            store.Initialize();
+                var o = store.DatabaseCommands.Get("111");
 
-            return store;
+                return store;
+            });
         }
 
         static IDocumentSession GetDocumentSesssion(IKernel kernel)
         {
-            var store = kernel.Resolve<IDocumentStore>();
-            return store.OpenSession();
+            return kernel.Resolve<IDocumentStore>().OpenSession();
         }
     }
 }

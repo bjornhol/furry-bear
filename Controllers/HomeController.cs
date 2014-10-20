@@ -14,17 +14,17 @@ namespace FurryBear.Controllers
 {
     public class HomeController : Controller
     {
-        public HomeController(IDocumentStore store, IDocumentSession session, ICacheClient cache)
+        public HomeController(IDocumentStore store, IDocumentSession session)
         {
             _store = store;
             _session = session;
-            _cache = cache;
         }
 
         private IDocumentStore _store;
         private IDocumentSession _session;
-        private ICacheClient _cache;
 
+        public ICacheClient Cache { get; set; }
+        
         public ActionResult Index()
         {
             ViewBag.Message = "";
@@ -38,11 +38,14 @@ namespace FurryBear.Controllers
         {
             List<Post> posts = _session.Query<Post>().OrderByDescending(p => p.Date).ToList();
 
-            posts.ForEach(p =>
+            if (Cache != null)
             {
-                p.CachedAt = DateTime.Now;
-                _cache.Set(p.Id, p);
-            });
+                posts.ForEach(p =>
+                {
+                    p.CachedAt = DateTime.Now;
+                    Cache.Set(p.Id, p);
+                });
+            }
 
             return View(posts);
         }
@@ -64,7 +67,17 @@ namespace FurryBear.Controllers
 
         public ActionResult Post(string id)
         {
-            var post = _cache.Get<Post>(id) ?? _session.Load<Post>(id);
+            Post post = null;
+
+            if (Cache != null)
+            {
+                post = Cache.Get<Post>(id);
+            }
+
+            if (post == null)
+            {
+                post = _session.Load<Post>(id);
+            }
 
             return View(post);
         }
@@ -76,6 +89,11 @@ namespace FurryBear.Controllers
             _session.SaveChanges();
 
             return RedirectToAction("Posts");
+        }
+
+        public ActionResult Error()
+        {
+            return View();
         }
     }
 }

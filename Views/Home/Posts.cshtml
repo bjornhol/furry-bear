@@ -20,7 +20,15 @@
                 </p>
             </div>
             <div class="panel-footer">
-                <span>Cached at</span> <span>@post.CachedAt</span>
+                @if (post.CachedAt == DateTime.MinValue)
+                {
+                    <span>Not cached</span>
+                }
+                else
+                {
+                    <span>Cached at</span>
+                    <span>@post.CachedAt</span>
+                }
             </div>
         </div>
     }
