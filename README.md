@@ -14,4 +14,4 @@ This is where I try out stuff. I hope it will end up in a tool for publishing me
 To run
 ------
 
-You need to add RavenDB connection string and Memcached endpoint/credentials.
+You need to add a RavenDB connection string and Memcached endpoint/credentials.
